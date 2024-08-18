@@ -58,7 +58,10 @@ class PlayerNode:
         if player_node is None or not isinstance(player_node, PlayerNode):
             raise ValueError("Must provide PlayerNode instance!")
         
-        # Ensure node is not added to itself.
+        # Ensure node is not added to itself. 
+        # ? Perhaps this logic is better suited in the DoublyLinkedList 
+        # implementation, as it should set it's own rules.
+        # > Leaving for now as it is not unreasonable...
         if player_node is self:
             raise ValueError("Cannot link a node to itself!")
         
@@ -101,6 +104,9 @@ class PlayerNode:
             raise ValueError("Must provide PlayerNode instance!")
         
         # Ensure node is not added to itself.
+        # ? Perhaps this logic is better suited in the DoublyLinkedList 
+        # implementation, as it should set it's own rules.
+        # > Leaving for now as it is not unreasonable...
         if player_node is self:
             raise ValueError("Cannot link a node to itself!")
 
