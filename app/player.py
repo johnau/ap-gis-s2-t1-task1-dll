@@ -1,4 +1,11 @@
+# player.py
+
 class Player:
+    """
+    An object that represents a Player, with a unique identifier, and a
+    name.
+    """
+
     def __init__(self, uid: str, name: str):
         self.__uid = uid
         self.__name = name

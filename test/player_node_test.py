@@ -1,5 +1,8 @@
+# player_node_test.py
+
 import unittest
 import uuid
+
 import sys
 import os
 
@@ -27,7 +30,7 @@ class TestPlayerNodeBehavior(unittest.TestCase):
         print("\nStart Test: New PlayerNode with valid arguments...")
 
         name = "John Wick"
-        guid = str(uuid.uuid4())  # uuid4 is parameterless
+        guid = str(uuid.uuid4())        # uuid4 is parameterless
         player = Player(guid, name)
         print(player)
 

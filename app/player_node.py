@@ -1,6 +1,13 @@
-from .player import Player
+# player_node.py
+
+from app.player import Player
 
 class PlayerNode:
+    """
+    A node that can be used with a Doubly-Linked List of PlayerNode
+    instances.
+    """
+
     def __init__(self, player: Player):
         """
         Initialize a PlayerNode. Must provide a Player object.
@@ -40,7 +47,7 @@ class PlayerNode:
         Set the linked PlayerNode before this node.
 
         Args:
-            node (PlayerNode): The PlayerNode to be linked as the 
+            player_node (PlayerNode): The PlayerNode to be linked as the 
              previous node. Must not be None and must be an instance of
              PlayerNode.
 
@@ -67,6 +74,14 @@ class PlayerNode:
         
         self.__prev_player = player_node
 
+    @previous.deleter
+    def previous(self):
+        """
+        Sets the previous node to None.
+        """
+        
+        self.__prev_player = None
+
     @property
     def next(self):
         """
@@ -74,7 +89,8 @@ class PlayerNode:
 
         Returns:
             PlayerNode: A node representing a player 
-            OR None if at the tail of the node sequence.
+
+            *Or None* if at the tail of the node sequence.
         """
 
         return self.__next_player
@@ -85,7 +101,7 @@ class PlayerNode:
         Set the linked PlayerNode after this node.
 
         Args:
-            node (PlayerNode): The PlayerNode to be linked as the 
+            player_node (PlayerNode): The PlayerNode to be linked as the 
              next node. Must not be None and must be an instance of
              PlayerNode.
 
@@ -111,6 +127,14 @@ class PlayerNode:
             raise ValueError("Cannot link a node to itself!")
 
         self.__next_player = player_node
+
+    @next.deleter
+    def next(self):
+        """
+        Sets the next node to None.
+        """
+
+        self.__next_player = None
 
     @property
     def player(self):
@@ -148,23 +172,23 @@ class PlayerNode:
 
         # Create current node string
         current = self.__player                     # Can't be equal to None
-        this_player_str = f"{current.name} (UID: {current.uid})"
+        this_player_str = f"{current.uid} ('{current.name}')"
         
         # Create default previous node string
         previous = self.__prev_player               # Can be equal to None
-        previous_str = "At head, no prior nodes!"
+        previous_str = "AT HEAD (No prior nodes)"
 
         # Create previous node string if node is present
         if previous is not None:
-            previous_str = f"{previous.name} (UID: {previous.uid})"
+            previous_str = f"{previous.key} ('{previous.player.name}')"
 
         # Create default next node string
         next = self.__next_player                   # Can be equal to None
-        next_str = "At tail, no more nodes!"
+        next_str = "AT TAIL (No more nodes)"
         
         # Create next node string if not is present
         if next is not None:
-            next_str = f"{next.name} (UID: {next.uid})"
+            next_str = f"{next.key} ('{next.player.name}')"
             
         return (
             f"PlayerNode(Previous Node=[{previous_str}], "
