@@ -6,7 +6,7 @@ import os
 # Add the project directory to sys.path so the file can be run without 
 # running module.
 # Added for convenience to run from VSCode rather than running module
-# from terminal.
+# or pytest from terminal.
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -21,6 +21,7 @@ class TestPlayerBehavior(unittest.TestCase):
         self.assertEqual(player.uid, guid)
         
         print(f"\nPlayer uid was as expected... {player.uid}")
+        print(player)
 
     def test_constructor_with_name_property(self):
         name = "John Wick"
@@ -29,6 +30,7 @@ class TestPlayerBehavior(unittest.TestCase):
         self.assertEqual(player.name, name)
         
         print(f"\nPlayer name was as expected... {player.name}")
+        print(player)
 
 if __name__ == "__main__":
     unittest.main()
