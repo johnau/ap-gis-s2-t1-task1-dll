@@ -1,5 +1,8 @@
+# player_list_test.py
+
 import unittest
 import uuid
+
 import sys
 import os
 
@@ -15,7 +18,9 @@ from app.player import Player
 class TestPlayerBehavior(unittest.TestCase):
 
     def test_constructor_with_uid_property(self):
-        guid = str(uuid.uuid4())  # uuid4 is parameterless
+        print("\nStart Test: New Player arguments (uid)...")
+
+        guid = str(uuid.uuid4())        # uuid4 is parameterless
         player = Player(guid, "not tested")
 
         self.assertEqual(player.uid, guid)
@@ -24,6 +29,8 @@ class TestPlayerBehavior(unittest.TestCase):
         print(player)
 
     def test_constructor_with_name_property(self):
+        print("\nStart Test: New Player arguments (name)...")
+
         name = "John Wick"
         player = Player("not tested", name)
         
