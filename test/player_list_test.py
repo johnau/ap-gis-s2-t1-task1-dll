@@ -224,15 +224,28 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.player_list.append(self.node1)     # Insert Player 1
         self.player_list.append(self.node2)     # Insert Player 2
         self.player_list.append(self.node3)     # Insert Player 3
+        self.player_list.display()
 
         self.assertEqual(self.player_list.head, self.node1)
         print(f"Current list head: {self.player_list.head}")
 
         self.player_list.shift()                # Remove from head
+        self.player_list.display()
 
         self.assertEqual(self.player_list.head, self.node2)
 
         print(f"Success, new list head: {self.player_list.head}")
+
+        self.player_list.shift()
+        self.player_list.display()
+
+        self.player_list.shift()
+        self.player_list.display()
+
+        self.assertTrue(self.player_list.is_empty())
+
+        with self.assertRaises(IndexError):
+            self.player_list.shift()
 
         print("Test success!")
 
@@ -247,15 +260,28 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.player_list.append(self.node1)     # Insert Player 1
         self.player_list.append(self.node2)     # Insert Player 2
         self.player_list.append(self.node3)     # Insert Player 3
+        self.player_list.display()
 
         self.assertEqual(self.player_list.tail, self.node3)
         print(f"Current list tail: {self.player_list.tail}")
 
-        self.player_list.pop()                # Remove from head
+        self.player_list.pop()                  # Remove from tail
+        self.player_list.display()
 
         self.assertEqual(self.player_list.tail, self.node2)
 
         print(f"Success, new list tail: {self.player_list.tail}")
+
+        self.player_list.pop()                  # Remove other nodes
+        self.player_list.display()
+
+        self.player_list.pop()
+        self.player_list.display()
+        
+        self.assertTrue(self.player_list.is_empty())
+
+        with self.assertRaises(IndexError):
+            self.player_list.pop()
 
         print("Test success!")        
 
