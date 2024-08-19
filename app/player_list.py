@@ -208,6 +208,43 @@ class PlayerList:
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
         return removing
 
+    def remove(self, key: str) -> PlayerNode:
+        """
+        Remove a node by key
+
+        Returns:
+            PlayerNode: The node that was removed
+            
+            *OR None* if the key was not found
+        """
+
+        current = self.__head                   # Start at head of list
+
+        while current is not None:              # Iterate to the end of the list
+            if current.key == key:            # Check for a match
+                # Handle removal...
+                if current.previous:            # Is there a previous node?
+                    current.previous.next = current.next      # Link it to next
+
+                elif current == self.__head:    # if not, should be at head,
+                    self.__head = current.next  # Set next as head
+
+                if current.next:                # Is there a next node?
+                    current.next.previous = current.previous  # Link it to previous
+
+                elif current == self.__tail:    # if not, should be at tail,
+                    self.__tail = current.previous  # Set previous as tail               
+
+                del current.previous            # Disconnect current
+                del current.next
+                print(f"Removed: {current}")
+                break                           # End the loop, current was removed
+
+            # if current key did not match provided key...
+            current = current.next              # ...move to the next node
+
+        return current
+
     def __ok_to_add(self, new_node: PlayerNode) -> bool:
         """
         Checks for duplicate PlayerNodes or Players through the 

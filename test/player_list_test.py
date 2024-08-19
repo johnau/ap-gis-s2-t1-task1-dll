@@ -259,5 +259,35 @@ class TestPlayerListBehavior(unittest.TestCase):
 
         print("Test success!")        
 
+    def test_remove_with_key(self):
+        """
+        Testing Doubly-Linked List behavior; removing by key
+        """
+
+        print("\nStart Test: Remove from list by key...")
+
+        # add some nodes
+        self.player_list.append(self.node1)     # Insert Player 1
+        self.player_list.append(self.node2)     # Insert Player 2
+        self.player_list.append(self.node3)     # Insert Player 3
+
+        self.assertEqual(self.player_list.tail.previous, self.node2)
+        print(f"Node before TAIL node: {self.player_list.tail.previous}")
+
+        removed = self.player_list.remove(self.node2.key) # Remove by key (succeed)
+
+        self.assertIsNotNone(removed)
+        self.assertEqual(self.player_list.head.next, self.node3)
+        self.assertEqual(self.player_list.tail.previous, self.node1)
+
+        print(f"After removal...",
+                f"\n\tBefore tail: {self.player_list.tail.previous}",
+                f"\n\tAfter head: {self.player_list.head.next}")
+
+        removed = self.player_list.remove(self.node2.key) # Remove by key (fail)
+        self.assertIsNone(removed)
+
+        print("Test success!")     
+
 if __name__ == '__main__':
     unittest.main()
