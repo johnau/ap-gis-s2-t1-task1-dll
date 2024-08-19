@@ -272,10 +272,11 @@ class PlayerList:
 
     def _iterate(self, reversed: bool):
         """
-        Internal Generator function to iterate through the linked list 
+        Generator function to iterate through the linked list 
           from head to tail, or tail to head, based on the 'reversed' 
           flag.
-
+        *Intended for internal use, but may be used externally*
+          
         Args:
             reversed (bool):
                 Iteration direction: 
@@ -294,7 +295,8 @@ class PlayerList:
 
     def _format_node(self, node):
         """
-        Internal function to generate formatted node string.
+        Returns a formatted string representation of a node.
+        *Intended for internal use, but may be used externally*
 
         Args:
             node (PlayerNode): The node to format.
@@ -302,6 +304,7 @@ class PlayerList:
         Returns:
             str: A formatted string representation of the node.
         """
+
         return f"> {node.player.name:<20} [{node.key}]"
 
     def __ok_to_add(self, new_node: PlayerNode) -> bool:
