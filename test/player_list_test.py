@@ -152,7 +152,6 @@ class TestPlayerListBehavior(unittest.TestCase):
 
         print("\nTest success!")
 
-
     def test_insert_at_tail_non_empty_list(self):
         """
         Testing Doubly-Linked List behavior for insert to non-empty 
@@ -213,6 +212,52 @@ class TestPlayerListBehavior(unittest.TestCase):
         print(f"List tail is as expected: {self.player_list.tail}")
 
         print("Test success!")
+
+    def test_remove_from_head(self):
+        """
+        Testing Doubly-Linked List behavior; removing from head
+        """
+
+        print("\nStart Test: Remove from list head...")
+
+        # add some nodes
+        self.player_list.append(self.node1)     # Insert Player 1
+        self.player_list.append(self.node2)     # Insert Player 2
+        self.player_list.append(self.node3)     # Insert Player 3
+
+        self.assertEqual(self.player_list.head, self.node1)
+        print(f"Current list head: {self.player_list.head}")
+
+        self.player_list.shift()                # Remove from head
+
+        self.assertEqual(self.player_list.head, self.node2)
+
+        print(f"Success, new list head: {self.player_list.head}")
+
+        print("Test success!")
+
+    def test_remove_from_tail(self):
+        """
+        Testing Doubly-Linked List behavior; removing from tail
+        """
+
+        print("\nStart Test: Remove from list tail...")
+
+        # add some nodes
+        self.player_list.append(self.node1)     # Insert Player 1
+        self.player_list.append(self.node2)     # Insert Player 2
+        self.player_list.append(self.node3)     # Insert Player 3
+
+        self.assertEqual(self.player_list.tail, self.node3)
+        print(f"Current list tail: {self.player_list.tail}")
+
+        self.player_list.pop()                # Remove from head
+
+        self.assertEqual(self.player_list.tail, self.node2)
+
+        print(f"Success, new list tail: {self.player_list.tail}")
+
+        print("Test success!")        
 
 if __name__ == '__main__':
     unittest.main()

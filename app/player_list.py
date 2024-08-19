@@ -10,7 +10,8 @@ class PlayerList:
     # Static properties for messages
     EMPTY_OR_INVALID_NODE_MSG = "PlayerNode argument was empty or invalid!"
     DUPLICATE_NODE_MSG = "Player or PlayerNode with ID: {uid} already exists in the list!"
-    SUCCESS_INSERT_MSG = "Inserted successfully at {position} of list: {node}"
+    SUCCESS_INSERT_MSG = "Inserted at {position} of list: {node}"
+    SUCCESS_REMOVE_MSG = "Removed from {position} of list: {node}"
 
     def __init__(self):
         self.__head = None
@@ -168,6 +169,44 @@ class PlayerList:
 
         print(f"{self.SUCCESS_INSERT_MSG.format(position='TAIL', node=new_node)}")
         return
+
+    def shift(self) -> PlayerNode:
+        """
+        Remove the Head node from the list
+
+        Returns:
+            PlayerNode: The node that was removed
+        """
+
+        removing = self.__head                  # Local reference
+        new_head = self.__head.next             # for clarity
+        
+        del new_head.previous                   # Update new head node state
+        del removing.next                       # Update old head node state
+
+        self.__head = new_head                  # Update head ref
+
+        print(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
+        return removing
+
+    def pop(self) -> PlayerNode:
+        """
+        Remove the Tail node from the list
+
+        Returns:
+            PlayerNode: The node that was removed
+        """
+
+        removing = self.__tail                  # Local reference
+        new_tail = self.__tail.previous         # for clarity
+
+        del new_tail.next                       # Update new tail node state
+        del removing.previous                   # Update old tail node state
+
+        self.__tail = new_tail                  # Update tail ref
+
+        print(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
+        return removing
 
     def __ok_to_add(self, new_node: PlayerNode) -> bool:
         """
