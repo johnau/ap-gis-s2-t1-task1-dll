@@ -289,5 +289,37 @@ class TestPlayerListBehavior(unittest.TestCase):
 
         print("Test success!")     
 
+    def test_display_list_descending(self):
+        """
+        Testing Doubly-Linked List behavior; display list in descending
+        or ascending order.
+        """
+
+        print("\nStart Test: Display list descending...")
+
+        # add some nodes
+        self.player_list.append(self.node1)     # Insert Player 1
+        self.player_list.append(self.node2)     # Insert Player 2
+        self.player_list.append(self.node3)     # Insert Player 3
+
+        # display the nodes descending (default; head to tail)
+        self.player_list.display()
+
+    def test_display_list_ascending(self):
+        """
+        Testing Doubly-Linked List behavior; display list in descending
+        or ascending order.
+        """
+
+        print("\nStart Test: Display list descending...")
+
+        # add some nodes
+        self.player_list.append(self.node1)     # Insert Player 1
+        self.player_list.append(self.node2)     # Insert Player 2
+        self.player_list.append(self.node3)     # Insert Player 3
+
+        # display the nodes descending (default; head to tail)
+        self.player_list.display(True)
+
 if __name__ == '__main__':
     unittest.main()
