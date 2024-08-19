@@ -47,9 +47,7 @@ class PlayerList:
             True if the list is empty, otherwise False.
         """
 
-        return self.__head is None              # No head to the list currently
-                                                # means no list, (but will 
-                                                # change with addition of tail)
+        return self.__head is None              # No head to the list, no list
     
     def insert_at_head(self, new_node: PlayerNode):
         """
@@ -168,6 +166,7 @@ class PlayerList:
             self.__insert_at_tail(new_node)
 
         print(f"{self.SUCCESS_INSERT_MSG.format(position='TAIL', node=new_node)}")
+
         return
 
     def shift(self) -> PlayerNode:
@@ -178,13 +177,19 @@ class PlayerList:
             PlayerNode: The node that was removed.
         """
 
-        removing = self.__head                  # Local reference
-        new_head = self.__head.next             # for clarity
-        
-        del new_head.previous                   # Update new head node state
-        del removing.next                       # Update old head node state
+        if self.is_empty():
+            raise IndexError("The list is empty!")
 
-        self.__head = new_head                  # Update head ref
+        removing = self.__head                  # Local reference
+        new_head = self.__head.next             # May be None
+
+        del removing.next                       # Update old head node state
+        if new_head:                            # If there is another node
+            del new_head.previous               # Update new head node state
+        else:                                   # otherwise...
+            self.__tail = None                  # clear the tail too
+            
+        self.__head = new_head                  # Shift the head pointer
 
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
         return removing
@@ -196,14 +201,20 @@ class PlayerList:
         Returns:
             PlayerNode: The node that was removed.
         """
+        
+        if self.is_empty():
+            raise IndexError("The list is empty!")
 
         removing = self.__tail                  # Local reference
-        new_tail = self.__tail.previous         # for clarity
+        new_tail = self.__tail.previous         # May be None
 
-        del new_tail.next                       # Update new tail node state
         del removing.previous                   # Update old tail node state
-
-        self.__tail = new_tail                  # Update tail ref
+        if new_tail:                            # If there is another node
+            del new_tail.next                   # Update new tail node state
+        else:                                   # otherwise...
+            self.__head = None                  # clear the head too
+        
+        self.__tail = new_tail                  # Shift the tail pointer
 
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
         return removing
@@ -254,6 +265,10 @@ class PlayerList:
                 Defaults to descending order (head to tail),
                 set reversed = True to print ascending order (tail to head).
         """
+        
+        if self.is_empty():
+            print("The list is empty!")
+            return
 
         # Iterate generator function (_iterate) and get node strings
         nodes = [self._format_node(node) for node in self._iterate(reversed)]
@@ -299,7 +314,7 @@ class PlayerList:
         *Intended for internal use, but may be used externally*
 
         Args:
-            node (PlayerNode): The node to format.
+            node (PlayerNode): The node to format. Not checked.
 
         Returns:
             str: A formatted string representation of the node.
