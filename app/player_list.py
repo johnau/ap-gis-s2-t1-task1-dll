@@ -23,7 +23,7 @@ class PlayerList:
         Get the PlayerNode at the head of the list.
 
         Returns:
-            PlayerNode: The node at the head of the list
+            PlayerNode: The node at the head of the list.
         """
 
         return self.__head
@@ -34,7 +34,7 @@ class PlayerList:
         Get the PlayerNode at the tail of the list.
 
         Returns:
-            PlayerNode: The node at the tail of the list
+            PlayerNode: The node at the tail of the list.
         """
 
         return self.__tail
@@ -98,7 +98,7 @@ class PlayerList:
                     the list from the head of the list, provided the
                     index is valid.
                 - A negative value less than -1 will try to insert from
-                    the tail of the list, provided the index is valid
+                    the tail of the list, provided the index is valid.
 
             new_node(PlayerNode): 
                 The PlayerNode instance to insert at head of list.
@@ -172,10 +172,10 @@ class PlayerList:
 
     def shift(self) -> PlayerNode:
         """
-        Remove the Head node from the list
+        Remove the Head node from the list.
 
         Returns:
-            PlayerNode: The node that was removed
+            PlayerNode: The node that was removed.
         """
 
         removing = self.__head                  # Local reference
@@ -191,10 +191,10 @@ class PlayerList:
 
     def pop(self) -> PlayerNode:
         """
-        Remove the Tail node from the list
+        Remove the Tail node from the list.
 
         Returns:
-            PlayerNode: The node that was removed
+            PlayerNode: The node that was removed.
         """
 
         removing = self.__tail                  # Local reference
@@ -210,12 +210,12 @@ class PlayerList:
 
     def remove(self, key: str) -> PlayerNode:
         """
-        Remove a node by key
+        Remove a node by key.
 
         Returns:
             PlayerNode: The node that was removed
-            
-            *OR None* if the key was not found
+
+            *OR None* if the key was not found.
         """
 
         current = self.__head                   # Start at head of list
@@ -244,6 +244,68 @@ class PlayerList:
             current = current.next              # ...move to the next node
 
         return current
+
+    def display(self, reversed: bool = False):
+        """
+        Prints the list from head to tail, or tail to head.
+
+        Args:
+            reversed (bool):
+                Defaults to descending order (head to tail),
+                set reversed = True to print ascending order (tail to head).
+        """
+
+        # Iterate generator function (_iterate) and get node strings
+        nodes = [self._format_node(node) for node in self._iterate(reversed)]
+
+        # Join strings
+        start_label = "<TAIL>" if reversed else "<HEAD>"
+        end_label = "<HEAD>" if reversed else "<TAIL>"
+        nodes_string = '\n'.join(nodes)
+        
+        print(f"Player list"
+              f"{' (Reversed)' if reversed else ''}"
+              f":"
+              f"\n{start_label} \n{nodes_string} \n{end_label}")
+
+        return
+
+    def _iterate(self, reversed: bool):
+        """
+        Generator function to iterate through the linked list 
+          from head to tail, or tail to head, based on the 'reversed' 
+          flag.
+        *Intended for internal use, but may be used externally*
+          
+        Args:
+            reversed (bool):
+                Iteration direction: 
+                - False = HEAD to TAIL,    
+                - True = TAIL to HEAD.
+          
+        Yields:
+            PlayerNode: The current node in the list.
+        """
+        
+        current = self.__tail if reversed else self.__head      
+
+        while current is not None:
+            yield current
+            current = current.previous if reversed else current.next 
+
+    def _format_node(self, node):
+        """
+        Returns a formatted string representation of a node.
+        *Intended for internal use, but may be used externally*
+
+        Args:
+            node (PlayerNode): The node to format.
+
+        Returns:
+            str: A formatted string representation of the node.
+        """
+
+        return f"> {node.player.name:<20} [{node.key}]"
 
     def __ok_to_add(self, new_node: PlayerNode) -> bool:
         """
