@@ -23,6 +23,10 @@ class TestPlayerListBehavior(unittest.TestCase):
     """
 
     def setUp(self):
+        """
+        unittest function for setup before each test
+        """
+
         self.player_list = PlayerList()
 
         # Create some test objects
@@ -44,6 +48,10 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.node3 = node3
 
     def test_insert_at_head_empty_list(self):
+        """
+        Testing Doubly-Linked list behavior for insert to empty list.
+        """
+
         print("\nStart Test: Insert to list head, empty list...")
 
         self.assertTrue(self.player_list.is_empty())
@@ -54,9 +62,20 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.assertFalse(self.player_list.is_empty())
         self.assertEqual(self.player_list.head, self.node1)
 
+        self.assertEqual(self.player_list.head, self.node1)
+        self.assertEqual(self.player_list.tail, self.node1)
+
+        print(f"List head is as expected: {self.player_list.head}")
+        print(f"List tail is as expected: {self.player_list.tail}")
+
         print("\nTest success!")
 
     def test_insert_at_head_non_empty_list(self):
+        """
+        Testing Doubly-Linked List behavior for insert to non-empty 
+        list.
+        """
+
         print("\nStart Test: Insert to list head, non empty list...")
 
         self.assertTrue(self.player_list.is_empty())
@@ -68,10 +87,19 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.assertEqual(self.player_list.head, self.node1)
         self.assertEqual(self.player_list.head.next, self.node2)
         self.assertEqual(self.node2.previous, self.node1)
+        self.assertEqual(self.player_list.tail, self.node2)
+
+        print(f"List head is as expected: {self.player_list.head}")
+        print(f"List tail is as expected: {self.player_list.tail}")
 
         print("\nTest success!")
 
     def test_insert_at_head_with_duplicate_node(self):
+        """
+        Testing Doubly-Linked List behavior for invalid insert to list
+        (duplication of node or player)
+        """
+
         print("\nStart Test: Insert to list head with duplicates...")
 
         self.assertTrue(self.player_list.is_empty())
@@ -94,6 +122,12 @@ class TestPlayerListBehavior(unittest.TestCase):
 
         # Insert a new player (will succeed)
         self.player_list.insert_at_head(self.node3)      # Insert Player 3
+
+        self.assertEqual(self.player_list.head, self.node3)
+        self.assertEqual(self.player_list.tail, self.node2)
+
+        print(f"List head is as expected: {self.player_list.head}")
+        print(f"List tail is as expected: {self.player_list.tail}")
 
         print("Test success!")
 
