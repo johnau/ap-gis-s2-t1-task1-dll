@@ -14,17 +14,29 @@ class PlayerList:
 
     def __init__(self):
         self.__head = None
+        self.__tail = None
 
     @property
     def head(self):
         """
-        Get the PlayerNode at the head of the list
+        Get the PlayerNode at the head of the list.
 
         Returns:
             PlayerNode: The node at the head of the list
         """
 
         return self.__head
+    
+    @property
+    def tail(self):
+        """
+        Get the PlayerNode at the tail of the list.
+
+        Returns:
+            PlayerNode: The node at the tail of the list
+        """
+
+        return self.__tail
 
     def is_empty(self):
         """
@@ -73,7 +85,7 @@ class PlayerList:
             del new_node.next                   # is correct (for empty list)
 
             self.__head = new_node              # Set the new node as the head
-                                                # node.
+            self.__tail = new_node              # node. Also as tail.
         
         # Inserting when the list is not empty...
         #
@@ -89,7 +101,7 @@ class PlayerList:
             current_head.previous = new_node    # node and old
 
             self.__head = new_node              # Set the new node as the head 
-                                                # node.
+                                                # node. No change to tail.
 
         print(f"{self.SUCCESS_INSERT_MSG.format(node=new_node)}")
         return
