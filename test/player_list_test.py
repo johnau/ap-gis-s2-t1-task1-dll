@@ -50,6 +50,7 @@ class TestPlayerListBehavior(unittest.TestCase):
     def test_insert_at_head_empty_list(self):
         """
         Testing Doubly-Linked list behavior for insert to empty list.
+        (Insert to head)
         """
 
         print("\nStart Test: Insert to list head, empty list...")
@@ -61,8 +62,6 @@ class TestPlayerListBehavior(unittest.TestCase):
         
         self.assertFalse(self.player_list.is_empty())
         self.assertEqual(self.player_list.head, self.node1)
-
-        self.assertEqual(self.player_list.head, self.node1)
         self.assertEqual(self.player_list.tail, self.node1)
 
         print(f"List head is as expected: {self.player_list.head}")
@@ -73,7 +72,7 @@ class TestPlayerListBehavior(unittest.TestCase):
     def test_insert_at_head_non_empty_list(self):
         """
         Testing Doubly-Linked List behavior for insert to non-empty 
-        list.
+        list. (Insert to head)
         """
 
         print("\nStart Test: Insert to list head, non empty list...")
@@ -97,7 +96,7 @@ class TestPlayerListBehavior(unittest.TestCase):
     def test_insert_at_head_with_duplicate_node(self):
         """
         Testing Doubly-Linked List behavior for invalid insert to list
-        (duplication of node or player)
+        (duplication of node or player) (Insert to Head)
         """
 
         print("\nStart Test: Insert to list head with duplicates...")
@@ -125,6 +124,90 @@ class TestPlayerListBehavior(unittest.TestCase):
 
         self.assertEqual(self.player_list.head, self.node3)
         self.assertEqual(self.player_list.tail, self.node2)
+
+        print(f"List head is as expected: {self.player_list.head}")
+        print(f"List tail is as expected: {self.player_list.tail}")
+
+        print("Test success!")
+
+    def test_insert_at_tail_empty_list(self):
+        """
+        Testing Doubly-Linked list behavior for insert to empty list.
+        (Insert to tail)
+        """
+
+        print("\nStart Test: Insert to list tail, empty list...")
+
+        self.assertTrue(self.player_list.is_empty())
+
+        # Insert node (will succeed)
+        self.player_list.append(self.node1)     # Insert only Player/node
+        
+        self.assertFalse(self.player_list.is_empty())
+        self.assertEqual(self.player_list.head, self.node1)
+        self.assertEqual(self.player_list.tail, self.node1)
+
+        print(f"List head is as expected: {self.player_list.head}")
+        print(f"List tail is as expected: {self.player_list.tail}")
+
+        print("\nTest success!")
+
+
+    def test_insert_at_tail_non_empty_list(self):
+        """
+        Testing Doubly-Linked List behavior for insert to non-empty 
+        list. (Insert to tail)
+        """
+
+        print("\nStart Test: Insert to list tail, non empty list...")
+
+        self.assertTrue(self.player_list.is_empty())
+
+        # Insert first two players (will succeed)
+        self.player_list.append(self.node1)      # Insert Player 1
+        self.player_list.append(self.node2)      # Insert Player 2 after
+
+        self.assertEqual(self.player_list.head, self.node1)
+        self.assertEqual(self.player_list.head.next, self.node2)
+        self.assertEqual(self.player_list.tail, self.node2)
+        self.assertEqual(self.player_list.tail.previous, self.node1)
+
+        print(f"List head is as expected: {self.player_list.head}")
+        print(f"List tail is as expected: {self.player_list.tail}")
+
+        print("\nTest success!")
+
+    def test_insert_at_tail_with_duplicate_node(self):
+        """
+        Testing Doubly-Linked List behavior for invalid insert to list
+        (duplication of node or player) (Insert to Tail)
+        """
+
+        print("\nStart Test: Insert to list tail with duplicates...")
+
+        self.assertTrue(self.player_list.is_empty())
+
+        # Insert first two players (will succeed)
+        self.player_list.append(self.node1)      # Insert Player 1
+        self.player_list.append(self.node2)      # Insert Player 2 after
+
+        # Insert a node again (will fail)
+        with self.assertRaises(ValueError):
+            self.player_list.append(self.node1)  # Insert duplicate node
+
+        print(f"Error raised trying to add same node twice...")
+
+        # Insert a player again (will fail)
+        with self.assertRaises(ValueError):
+            self.player_list.append(self.node2x) # Insert duplicate player
+
+        print(f"Error raised trying to add same player twice...")
+
+        # Insert a new player (will succeed)
+        self.player_list.append(self.node3)      # Insert Player 3
+
+        self.assertEqual(self.player_list.head, self.node1)
+        self.assertEqual(self.player_list.tail, self.node3)
 
         print(f"List head is as expected: {self.player_list.head}")
         print(f"List tail is as expected: {self.player_list.tail}")

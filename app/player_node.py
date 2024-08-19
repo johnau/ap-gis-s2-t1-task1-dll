@@ -191,8 +191,8 @@ class PlayerNode:
             next_str = f"{next.key} ('{next.player.name}')"
             
         return (
-            f"PlayerNode(Previous Node=[{previous_str}], "
-            f"Current Node=[{this_player_str}], "
+            f"PlayerNode([{this_player_str}], "
+            f"Previous Node=[{previous_str}], "
             f"Next Node=[{next_str}] "
             f")"
         )
