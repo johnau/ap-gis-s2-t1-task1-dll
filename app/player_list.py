@@ -177,16 +177,16 @@ class PlayerList:
 
         removing = self.__head                  # Local reference
         new_head = self.__head.next             # May be None
+        self.__head = new_head                  # Shift the head pointer
 
-        del removing.next                       # Update old head node state
         if new_head:                            # If there is another node
             del new_head.previous               # Update new head node state
         else:                                   # otherwise...
             self.__tail = None                  # clear the tail too
-            
-        self.__head = new_head                  # Shift the head pointer
 
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
+
+        del removing.next                       # Update old head node state
         return removing                         # Return detached node
 
     def pop(self) -> PlayerNode:
@@ -202,16 +202,16 @@ class PlayerList:
 
         removing = self.__tail                  # Local reference
         new_tail = self.__tail.previous         # May be None
+        self.__tail = new_tail                  # Shift the tail pointer
 
-        del removing.previous                   # Update old tail node state
         if new_tail:                            # If there is another node
             del new_tail.next                   # Update new tail node state
         else:                                   # otherwise...
             self.__head = None                  # clear the head too
         
-        self.__tail = new_tail                  # Shift the tail pointer
-
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
+        
+        del removing.previous                   # Update old tail node state
         return removing                         # Return detached node
 
     def remove(self, key: str) -> PlayerNode:
