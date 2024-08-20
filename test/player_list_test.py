@@ -58,7 +58,7 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.assertTrue(self.player_list.is_empty())
 
         # Insert node (will succeed)
-        self.player_list.insert_at_head(self.node1)     # Insert only Player/node
+        self.player_list.push(self.node1)     # Insert only Player/node
         
         self.assertFalse(self.player_list.is_empty())
         self.assertEqual(self.player_list.head, self.node1)
@@ -80,8 +80,8 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.assertTrue(self.player_list.is_empty())
 
         # Insert first two players (will succeed)
-        self.player_list.insert_at_head(self.node2)      # Insert Player 2
-        self.player_list.insert_at_head(self.node1)      # Insert Player 1 infront
+        self.player_list.push(self.node2)      # Insert Player 2
+        self.player_list.push(self.node1)      # Insert Player 1 infront
 
         self.assertEqual(self.player_list.head, self.node1)
         self.assertEqual(self.player_list.head.next, self.node2)
@@ -104,23 +104,23 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.assertTrue(self.player_list.is_empty())
 
         # Insert first two players (will succeed)
-        self.player_list.insert_at_head(self.node2)      # Insert Player 2
-        self.player_list.insert_at_head(self.node1)      # Insert Player 1 infront
+        self.player_list.push(self.node2)      # Insert Player 2
+        self.player_list.push(self.node1)      # Insert Player 1 infront
 
         # Insert a node again (will fail)
         with self.assertRaises(ValueError):
-            self.player_list.insert_at_head(self.node2)  # Insert duplicate node
+            self.player_list.push(self.node2)  # Insert duplicate node
 
         print(f"Error raised trying to add same node twice...")
 
         # Insert a player again (will fail)
         with self.assertRaises(ValueError):
-            self.player_list.insert_at_head(self.node2x) # Insert duplicate player
+            self.player_list.push(self.node2x) # Insert duplicate player
 
         print(f"Error raised trying to add same player twice...")
 
         # Insert a new player (will succeed)
-        self.player_list.insert_at_head(self.node3)      # Insert Player 3
+        self.player_list.push(self.node3)      # Insert Player 3
 
         self.assertEqual(self.player_list.head, self.node3)
         self.assertEqual(self.player_list.tail, self.node2)
