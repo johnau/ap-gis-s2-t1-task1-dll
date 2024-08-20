@@ -280,7 +280,7 @@ class PlayerList:
 
         return
 
-    def _iterate(self, reversed: bool):
+    def _iterate(self, reversed: bool = False):
         """
         Generator function to iterate through the linked list 
           from head to tail, or tail to head, based on the 'reversed' 
@@ -323,16 +323,15 @@ class PlayerList:
          existing items in the list
         """
 
-        curr_checking = self.__head             # Start at the head
-        while curr_checking is not None:        # Iterate while we have more
-            if (curr_checking == new_node       # Check for collision
-                    or curr_checking.player == new_node.player
-                    or curr_checking.key == new_node.key):
-                return False                    # Existing match found
-                
-            curr_checking = curr_checking.next  # Move to next
-        
-        return True                             # No existing matches
+        # Iterate generator function (_iterate) and find collisiosns
+        collision = [
+            node for node in self._iterate()
+            if (node == new_node            # Check for collision
+                or node.player == new_node.player
+                or node.key == new_node.key)
+            ]
+
+        return len(collision) == 0
         
     def __insert_first_entry(self, new_node: PlayerNode):
         """
