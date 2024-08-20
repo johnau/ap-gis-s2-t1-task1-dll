@@ -127,7 +127,7 @@ class PlayerList:
             return
 
         # Check the index value is valid for other additions
-        raise SystemError(f"Adding internal nodes not yet supported")
+        raise RuntimeError(f"Adding internal nodes not yet supported")
 
         return
 
@@ -186,7 +186,7 @@ class PlayerList:
 
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
 
-        del removing.next                       # Update old head node state
+        del removing.next                       # Detach the old head node
         return removing                         # Return detached node
 
     def pop(self) -> PlayerNode:
@@ -211,7 +211,7 @@ class PlayerList:
         
         print(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
         
-        del removing.previous                   # Update old tail node state
+        del removing.previous                   # Detach the old tail node
         return removing                         # Return detached node
 
     def remove(self, key: str) -> PlayerNode:
