@@ -157,7 +157,21 @@ class PlayerNode:
         """
 
         return self.__player.uid
+    
+    def equals(self, other):
+        """
+        Equality check, compares:
+        - node instance equals
+        - node player instance equals
+        - node player uid equals
+        """
+        if isinstance(other, PlayerNode):
+            return (self == other or                # Check instance, 
+                    self.player == other.player or  # player instance,
+                    self.key == other.key)          # and player uid / key
         
+        return False
+
     def __str__(self):
         """
         Returns a string representation of this object instance, 

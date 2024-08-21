@@ -1,4 +1,5 @@
 # player_list.py
+import logging
 
 from app.player_node import PlayerNode
 
@@ -16,6 +17,8 @@ class PlayerList:
     def __init__(self):
         self.__head = None
         self.__tail = None
+
+        logging.basicConfig(level=logging.INFO)
 
     @property
     def head(self):
@@ -79,7 +82,7 @@ class PlayerList:
         else:
             self.__insert_at_head(new_node)         # Insert at head
 
-        print(f"{self.SUCCESS_INSERT_MSG.format(position='HEAD', node=new_node)}")  # Debug
+        logging.debug(f"{self.SUCCESS_INSERT_MSG.format(position='HEAD', node=new_node)}")  # Debug
         return
 
     def insert(self, index: int, new_node: PlayerNode):
@@ -114,11 +117,11 @@ class PlayerList:
             raise ValueError(f"{self.DUPLICATE_NODE_MSG.format(uid=new_node.key)}")
         
         # Inserting when the list is empty...
-
         if self.is_empty():                             
             self.__insert_first_entry(new_node)         # Always insert first
             return                                      
         
+        # Insert at head or tail...
         if index == 0:
             self.__insert_at_head(new_node)             # Insert at head
             return
@@ -160,7 +163,7 @@ class PlayerList:
         else:
             self.__insert_at_tail(new_node)         # Insert at tail
 
-        print(f"{self.SUCCESS_INSERT_MSG.format(position='TAIL', node=new_node)}")
+        logging.debug(f"{self.SUCCESS_INSERT_MSG.format(position='TAIL', node=new_node)}")
 
         return
 
@@ -184,7 +187,7 @@ class PlayerList:
         else:                                   # otherwise...
             self.__tail = None                  # clear the tail too
 
-        print(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
+        logging.debug(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
 
         del removing.next                       # Detach the old head node
         return removing                         # Return detached node
@@ -209,7 +212,7 @@ class PlayerList:
         else:                                   # otherwise...
             self.__head = None                  # clear the head too
         
-        print(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
+        logging.debug(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
         
         del removing.previous                   # Detach the old tail node
         return removing                         # Return detached node
@@ -265,13 +268,13 @@ class PlayerList:
             print("The list is empty!")         # Early exit if empty
             return
 
-        # Iterate generator function (_iterate) and get node strings
-        nodes = [self._format_node(node) for node in self._iterate(reversed)]
+        # Map format node func against iterator
+        nodes2 = list(map(self._format_node, self._iterate(reversed)))
 
         # Join strings
         start_label = "<TAIL>" if reversed else "<HEAD>"
         end_label = "<HEAD>" if reversed else "<TAIL>"
-        nodes_string = '\n'.join(nodes)         # Nodes with line separator
+        nodes_string = '\n'.join(nodes2)         # Nodes with line separator
         
         print(f"<== Player list"                # Print the display string
               f"{' (Reversed) ' if reversed else ' '}"
@@ -323,15 +326,9 @@ class PlayerList:
          existing items in the list
         """
 
-        # Iterate generator function (_iterate) and find collisiosns
-        collision = [
-            node for node in self._iterate()
-            if (node == new_node            # Check for collision
-                or node.player == new_node.player
-                or node.key == new_node.key)
-            ]
-
-        return len(collision) == 0
+        # Filter the list with node.equals func to find collisions
+        # return not any(node.equals(new_node) for node in self._iterate())
+        return not any(filter(new_node.equals, self._iterate()))
         
     def __insert_first_entry(self, new_node: PlayerNode):
         """
