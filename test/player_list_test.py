@@ -22,6 +22,8 @@ class TestPlayerListBehavior(unittest.TestCase):
     Test the behavior of the Doubly Linked List implementation
     """
 
+    WRONG_NODE_INSTANCE_MSG = "The {name} node did not match expected instance"
+
     def setUp(self):
         """
         unittest function for setup before each test
@@ -83,10 +85,17 @@ class TestPlayerListBehavior(unittest.TestCase):
         self.player_list.push(self.node2)      # Insert Player 2
         self.player_list.push(self.node1)      # Insert Player 1 infront
 
-        self.assertEqual(self.player_list.head, self.node1)
-        self.assertEqual(self.player_list.head.next, self.node2)
-        self.assertEqual(self.node2.previous, self.node1)
-        self.assertEqual(self.player_list.tail, self.node2)
+        self.assertEqual(self.player_list.head, self.node1, 
+                         self.WRONG_NODE_INSTANCE_MSG.format(name='HEAD'))
+        
+        self.assertEqual(self.player_list.head.next, self.node2,
+                         self.WRONG_NODE_INSTANCE_MSG.format(name='HEAD.NEXT'))
+        
+        self.assertEqual(self.node2.previous, self.node1,
+                         self.WRONG_NODE_INSTANCE_MSG.format(name='2ND'))
+        
+        self.assertEqual(self.player_list.tail, self.node2,
+                         self.WRONG_NODE_INSTANCE_MSG.format(name='TAIL'))
 
         print(f"List head is as expected: {self.player_list.head}")
         print(f"List tail is as expected: {self.player_list.tail}")
