@@ -22,12 +22,12 @@ class PlayerNode:
         """
 
         # Explicit enforce None and correct type
-        if player is None or not isinstance(player, Player):  
-            raise ValueError("Must provide PlayerNode instance!")  # Ignore unreachable IDE hint...
+        if player is None:  
+            raise ValueError("Must provide PlayerNode instance!")
 
-        self.__player = player
-        self.__prev_player = None  # is 'last' more "pythonic" than 'prev'?
-        self.__next_player = None
+        self._player = player
+        self._prev_player = None
+        self._next_player = None
 
     @property
     def previous(self):
@@ -39,7 +39,7 @@ class PlayerNode:
             OR None if at the head of the node sequence.
         """
 
-        return self.__prev_player
+        return self._prev_player
 
     @previous.setter
     def previous(self, player_node):
@@ -61,26 +61,18 @@ class PlayerNode:
             Intended to be used in a Doubly Linked List structure. 
         """
 
-        # Ensure not None and correct object type.
-        if player_node is None or not isinstance(player_node, PlayerNode):
+        if player_node is None:
             raise ValueError("Must provide PlayerNode instance!")
         
-        # Ensure node is not added to itself. 
-        # ? Perhaps this logic is better suited in the DoublyLinkedList 
-        # implementation, as it should set it's own rules.
-        # > Leaving for now as it is not unreasonable...
-        if player_node is self:
-            raise ValueError("Cannot link a node to itself!")
-        
-        self.__prev_player = player_node
+        self._prev_player = player_node
 
     @previous.deleter
     def previous(self):
         """
-        Sets the previous node to None.
+        Clears the reference
         """
         
-        self.__prev_player = None
+        self._prev_player = None
 
     @property
     def next(self):
@@ -93,7 +85,7 @@ class PlayerNode:
             *Or None* if at the tail of the node sequence.
         """
 
-        return self.__next_player
+        return self._next_player
 
     @next.setter
     def next(self, player_node):
@@ -106,35 +98,24 @@ class PlayerNode:
              PlayerNode.
 
         Raises:
-            ValueError: If the node argument is not an instance of 
-             PlayerNode or is None.
-
-            ValueError: If the node argument is this node 
+            ValueError: If the node argument is None.
 
         Notes:
             Intended to be used in a Doubly Linked List structure. 
         """
 
-        # Ensure not None and correct object type
-        if player_node is None or not isinstance(player_node, PlayerNode):
+        if player_node is None:
             raise ValueError("Must provide PlayerNode instance!")
-        
-        # Ensure node is not added to itself.
-        # ? Perhaps this logic is better suited in the DoublyLinkedList 
-        # implementation, as it should set it's own rules.
-        # > Leaving for now as it is not unreasonable...
-        if player_node is self:
-            raise ValueError("Cannot link a node to itself!")
 
-        self.__next_player = player_node
+        self._next_player = player_node
 
     @next.deleter
     def next(self):
         """
-        Sets the next node to None.
+        Clears the reference
         """
 
-        self.__next_player = None
+        self._next_player = None
 
     @property
     def player(self):
@@ -145,7 +126,7 @@ class PlayerNode:
             Player: An object representing a player.
         """
 
-        return self.__player
+        return self._player
     
     @property
     def key(self) -> str:
@@ -156,7 +137,7 @@ class PlayerNode:
             str: A Unique ID string.
         """
 
-        return self.__player.uid
+        return self._player.uid
     
     def equals(self, other):
         """
@@ -166,43 +147,25 @@ class PlayerNode:
         - node player uid equals
         """
         if isinstance(other, PlayerNode):
-            return (self == other or                # Check instance, 
-                    self.player == other.player or  # player instance,
-                    self.key == other.key)          # and player uid / key
+            return (self == other or 
+                    self.player == other.player or
+                    self.key == other.key) 
         
         return False
 
     def __str__(self):
-        """
-        Returns a string representation of this object instance, 
-        including:
-        - Previous node's Player Name and Unique ID (if there is one)
-        - This node Player Name and Unique ID
-        - Next node's Player Name and Unique ID (if there is one)
-
-        Returns:
-            str: A string representation of this object instance
-        """
-
-        # Create current node string
-        current = self.__player                     # Can't be equal to None
-        this_player_str = f"{current.uid} ('{current.name}')"
+        current = self._player
+        this_player_str = f"{current.uid} ({repr(current.name)})"
         
-        # Create default previous node string
-        previous = self.__prev_player               # Can be equal to None
+        previous = self._prev_player
         previous_str = "AT HEAD (No prior nodes)"
-
-        # Create previous node string if node is present
         if previous is not None:
-            previous_str = f"{previous.key} ('{previous.player.name}')"
+            previous_str = f"{previous.key} ({repr(previous.player.name)})"
 
-        # Create default next node string
-        next = self.__next_player                   # Can be equal to None
+        next = self._next_player
         next_str = "AT TAIL (No more nodes)"
-        
-        # Create next node string if not is present
         if next is not None:
-            next_str = f"{next.key} ('{next.player.name}')"
+            next_str = f"{next.key} ({repr(next.player.name)})"
             
         return (
             f"PlayerNode([{this_player_str}], "

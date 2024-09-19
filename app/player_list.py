@@ -8,17 +8,12 @@ class PlayerList:
     A Double-Linked List implementation for a list of Player instaces.
     """
 
-    # Static properties for messages
-    EMPTY_OR_INVALID_NODE_MSG = "PlayerNode argument was empty or invalid!"
-    DUPLICATE_NODE_MSG = "Player or PlayerNode with ID: {uid} already exists in the list!"
-    SUCCESS_INSERT_MSG = "Inserted at {position} of list: {node}"
-    SUCCESS_REMOVE_MSG = "Removed from {position} of list: {node}"
-
     def __init__(self):
-        self.__head = None
-        self.__tail = None
+        self._head = None
+        self._tail = None
 
         logging.basicConfig(level=logging.INFO)
+
 
     @property
     def head(self):
@@ -29,7 +24,7 @@ class PlayerList:
             PlayerNode: The node at the head of the list.
         """
 
-        return self.__head                      # return the head property
+        return self._head
     
     @property
     def tail(self):
@@ -40,7 +35,7 @@ class PlayerList:
             PlayerNode: The node at the tail of the list.
         """
 
-        return self.__tail                      # return the tail property
+        return self._tail
 
     def is_empty(self):
         """
@@ -50,8 +45,7 @@ class PlayerList:
             True if the list is empty, otherwise False.
         """
 
-        return self.__head is None                  # No head to the list, 
-                                                    # no list
+        return self._head is None
     
     def push(self, new_node: PlayerNode):
         """
@@ -60,30 +54,25 @@ class PlayerList:
         Args:
             new_node(PlayerNode): 
                 The PlayerNode instance to insert at head of list.
+
+        Raises:
+            ValueError when node is None
+
         """
 
-        # Enforce not None and correct object type
-        # 
-        # - Prevents an invalid state to the list
-        if new_node is None or not isinstance(new_node, PlayerNode):
-            raise ValueError(self.EMPTY_OR_INVALID_NODE_MSG)
+        if new_node is None:
+            raise ValueError("PlayerNode argument was empty or invalid!")
 
-        # Check if the node or player is already in the list
-        # 
-        # - Prevents an invalid state to the list
-        if not self.__ok_to_add(new_node):
-            raise ValueError(f"{self.DUPLICATE_NODE_MSG.format(uid=new_node.key)}")
+        if not self._check_for_dupes(new_node):
+            raise ValueError(f"Player or PlayerNode with ID: {new_node.key} already exists in the list!")
 
-        # Inserting when the list is empty...
         if self.is_empty():
-            self.__insert_first_entry(new_node)     # Insert first node
-        
-        # Inserting when the list is not empty...
+            self._head = new_node
+            self._tail = new_node
         else:
-            self.__insert_at_head(new_node)         # Insert at head
+            self._insert_at_head(new_node)
 
-        logging.debug(f"{self.SUCCESS_INSERT_MSG.format(position='HEAD', node=new_node)}")  # Debug
-        return
+        logging.debug(f"Inserted at HEAD of list: {new_node}")
 
     def insert(self, index: int, new_node: PlayerNode):
         """
@@ -104,35 +93,26 @@ class PlayerList:
                 The PlayerNode instance to insert at head of list.
         """
 
-        # Enforce not None and correct object type
-        # 
-        # - Prevents an invalid state to the list
-        if new_node is None or not isinstance(new_node, PlayerNode):
-            raise ValueError(self.EMPTY_OR_INVALID_NODE_MSG)
+        if new_node is None:
+            raise ValueError("PlayerNode argument was empty or invalid!")
 
-        # Check if the node or player is already in the list
-        # 
-        # - Prevents an invalid state to the list
-        if not self.__ok_to_add(new_node):
-            raise ValueError(f"{self.DUPLICATE_NODE_MSG.format(uid=new_node.key)}")
+        if not self._check_for_dupes(new_node):
+            raise ValueError(f"Player or PlayerNode with ID: {new_node.key} already exists in the list!")
         
-        # Inserting when the list is empty...
         if self.is_empty():                             
-            self.__insert_first_entry(new_node)         # Always insert first
+            self._head = new_node
+            self._tail = new_node
             return                                      
         
-        # Insert at head or tail...
         if index == 0:
-            self.__insert_at_head(new_node)             # Insert at head
+            self._insert_at_head(new_node)
             return
         elif index == -1:
-            self.__insert_at_tail(new_node)             # Insert at tail
+            self._insert_at_tail(new_node)
             return
 
         # Check the index value is valid for other additions
         raise RuntimeError(f"Adding internal nodes not yet supported")
-
-        return
 
     def append(self, new_node: PlayerNode):
         """
@@ -141,31 +121,25 @@ class PlayerList:
         Args:
             new_node(PlayerNode): 
                 The PlayerNode instance to insert at tail of list.
+
+        Raises:
+            ValueError if new node is None
         """
 
-        # Enforce not None and correct object type
-        # 
-        # - Prevents an invalid state to the list
-        if new_node is None or not isinstance(new_node, PlayerNode):
-            raise ValueError(self.EMPTY_OR_INVALID_NODE_MSG)
+        if new_node is None:
+            raise ValueError("PlayerNode argument was empty or invalid!")
 
-        # Check if the node or player is already in the list
-        # 
-        # - Prevents an invalid state to the list
-        if not self.__ok_to_add(new_node):
-            raise ValueError(f"{self.DUPLICATE_NODE_MSG.format(uid=new_node.key)}")
+        if not self._check_for_dupes(new_node):
+            raise ValueError(f"Player or PlayerNode with ID: {new_node.key} already exists in the list!")
 
-        # Inserting when the list is empty...
         if self.is_empty():
-            self.__insert_first_entry(new_node)     # Insert first node
+            self._head = new_node
+            self._tail = new_node
         
-        # Inserting when the list is not empty...
         else:
-            self.__insert_at_tail(new_node)         # Insert at tail
+            self._insert_at_tail(new_node)
 
-        logging.debug(f"{self.SUCCESS_INSERT_MSG.format(position='TAIL', node=new_node)}")
-
-        return
+        logging.debug(f"Inserted at TAIL of list: {new_node}")
 
     def shift(self) -> PlayerNode:
         """
@@ -178,19 +152,19 @@ class PlayerList:
         if self.is_empty():
             raise IndexError("The list is empty!")
 
-        removing = self.__head                  # Local reference
-        new_head = self.__head.next             # May be None
-        self.__head = new_head                  # Shift the head pointer
+        removing = self._head
+        new_head = self._head.next              # May be None
+        self._head = new_head                   # Shift the head pointer
 
-        if new_head:                            # If there is another node
-            del new_head.previous               # Update new head node state
-        else:                                   # otherwise...
-            self.__tail = None                  # clear the tail too
+        if new_head:
+            del new_head.previous               # Deleter clears reference
+        else:
+            self._tail = None
 
-        logging.debug(f"{self.SUCCESS_REMOVE_MSG.format(position='HEAD', node=removing)}")
+        logging.debug(f"Removed from HEAD of list: {removing}")
 
-        del removing.next                       # Detach the old head node
-        return removing                         # Return detached node
+        del removing.next
+        return removing
 
     def pop(self) -> PlayerNode:
         """
@@ -203,19 +177,19 @@ class PlayerList:
         if self.is_empty():
             raise IndexError("The list is empty!")
 
-        removing = self.__tail                  # Local reference
-        new_tail = self.__tail.previous         # May be None
-        self.__tail = new_tail                  # Shift the tail pointer
+        removing = self._tail
+        new_tail = self._tail.previous         # May be None
+        self._tail = new_tail                  # Shift the tail pointer
 
-        if new_tail:                            # If there is another node
-            del new_tail.next                   # Update new tail node state
-        else:                                   # otherwise...
-            self.__head = None                  # clear the head too
+        if new_tail:
+            del new_tail.next                  # Deleter clears refernce
+        else:
+            self._head = None
         
-        logging.debug(f"{self.SUCCESS_REMOVE_MSG.format(position='TAIL', node=removing)}")
+        logging.debug(f"Removed from TAIL of list: {removing}")
         
-        del removing.previous                   # Detach the old tail node
-        return removing                         # Return detached node
+        del removing.previous
+        return removing
 
     def remove(self, key: str) -> PlayerNode:
         """
@@ -227,34 +201,34 @@ class PlayerList:
             *OR None* if the key was not found.
         """
 
-        current = self.__head                   # Start at head of list
+        current = self._head
 
-        while current is not None:              # Iterate to the end of the list
-            if current.key == key:              # Check for a match
-                # Handle removal...
-                if current.previous:            # Is there a previous node?
-                    current.previous.next = current.next      # Link it to next
+        while current is not None:
+            if current.key is not key:
+                current = current.next
+                continue
 
-                elif current == self.__head:    # if not, should be at head,
-                    self.__head = current.next  # Set next as head
+            # Handle removal...
+            if current.previous:
+                current.previous.next = current.next
 
-                if current.next:                # Is there a next node?
-                    current.next.previous = current.previous  # Link it to previous
+            elif current == self._head:
+                self._head = current.next
 
-                elif current == self.__tail:    # if not, should be at tail,
-                    self.__tail = current.previous  # Set previous as tail               
+            if current.next:
+                current.next.previous = current.previous
 
-                del current.previous            # Disconnect current
-                del current.next
-                print(f"Removed: {current}")
-                break                           # End the loop, current was removed
+            elif current == self._tail:
+                self._tail = current.previous
 
-            # if current key did not match provided key...
-            current = current.next              # ...move to the next node
+            del current.previous
+            del current.next
+            logging.debug(f"Removed: {current}")
+            break
 
         return current
 
-    def display(self, reversed: bool = False):
+    def display(self, reverse: bool = False):
         """
         Prints the list from head to tail, or tail to head.
 
@@ -265,46 +239,34 @@ class PlayerList:
         """
         
         if self.is_empty():
-            print("The list is empty!")         # Early exit if empty
+            print("The list is empty!")
             return
 
-        # Map format node func against iterator
-        nodes2 = list(map(self._format_node, self._iterate(reversed)))
+        nodes_list = list(map(self._format_node, reversed(self) if reverse else self))
 
         # Join strings
-        start_label = "<TAIL>" if reversed else "<HEAD>"
-        end_label = "<HEAD>" if reversed else "<TAIL>"
-        nodes_string = '\n'.join(nodes2)         # Nodes with line separator
+        start_label = "<TAIL>" if reverse else "<HEAD>"
+        end_label = "<HEAD>" if reverse else "<TAIL>"
+        nodes_string = '\n'.join(nodes_list)
         
-        print(f"<== Player list"                # Print the display string
-              f"{' (Reversed) ' if reversed else ' '}"
+        print(f"<== Player list"
+              f"{' (Reversed) ' if reverse else ' '}"
               f"==>\n"
               f"{start_label} \n{nodes_string} \n{end_label}")
 
-        return
+    def __iter__(self):
+        current = self._head
 
-    def _iterate(self, reversed: bool = False):
-        """
-        Generator function to iterate through the linked list 
-          from head to tail, or tail to head, based on the 'reversed' 
-          flag.
-        *Intended for internal use, but may be used externally*
-          
-        Args:
-            reversed (bool):
-                Iteration direction: 
-                - False = HEAD to TAIL,    
-                - True = TAIL to HEAD.
-          
-        Yields:
-            PlayerNode: The current node in the list.
-        """
-        
-        current = self.__tail if reversed else self.__head  # Set current
-
-        while current is not None:                          # Iterate + yield
+        while current is not None:
             yield current
-            current = current.previous if reversed else current.next  # Next
+            current = current.next 
+
+    def __reversed__(self):
+        current = self._tail
+
+        while current is not None:
+            yield current
+            current = current.previous         
 
     def _format_node(self, node):
         """
@@ -320,32 +282,17 @@ class PlayerList:
 
         return f"> {node.player.name:<20} [{node.key}]"
 
-    def __ok_to_add(self, new_node: PlayerNode) -> bool:
+    def _check_for_dupes(self, new_node: PlayerNode) -> bool:
         """
         Checks for duplicate PlayerNodes or Players through the 
          existing items in the list
         """
 
         # Filter the list with node.equals func to find collisions
-        # return not any(node.equals(new_node) for node in self._iterate())
-        return not any(filter(new_node.equals, self._iterate()))
-        
-    def __insert_first_entry(self, new_node: PlayerNode):
-        """
-        Inserts the first entry to the list
-        """
+        # return not any(node.equals(new_node) for node in self)
+        return not any(filter(new_node.equals, self))
 
-        # Inserting when the list is empty...
-        #
-        # - Force node state
-        # - Update list
-        del new_node.previous               # Ensure the new node state 
-        del new_node.next                   # is correct (for empty list)
-
-        self.__head = new_node              # Set the new node as the head
-        self.__tail = new_node              # node. Also as tail.
-
-    def __insert_at_head(self, new_node: PlayerNode):
+    def _insert_at_head(self, new_node: PlayerNode):
         """
         Inserting when the list is not empty...
         
@@ -354,19 +301,17 @@ class PlayerList:
         - Update list
         """
 
-        current_head = self.__head          # For clarity
+        current_head = self._head
 
-        del new_node.previous               # Ensure the head note state
-                                            # is correct
+        if new_node.previous:
+            raise ValueError("New node should not be connected to other nodes")
 
-        new_node.next = current_head        # Create link between new head
-        current_head.previous = new_node    # node and old
+        new_node.next = current_head        # Connect the new head
+        current_head.previous = new_node
 
-        self.__head = new_node              # Set the new node as the head 
-                                            # node. No change to tail.
-        return
+        self._head = new_node               # Update the head ref
     
-    def __insert_at_tail(self, new_node: PlayerNode):
+    def _insert_at_tail(self, new_node: PlayerNode):
         """
         Inserting when the list is not empty...
         
@@ -375,14 +320,12 @@ class PlayerList:
         - Update list reference
         """
 
-        current_tail = self.__tail          # For clarity
+        current_tail = self._tail
 
-        del new_node.next                   # Ensure the tail note state
-                                            # is correct
+        if new_node.next:
+            raise ValueError("New node should not be connect to other nodes")
 
-        new_node.previous = current_tail    # Create link between new tail
-        current_tail.next = new_node        # node and old
+        new_node.previous = current_tail    # Connect the new tail
+        current_tail.next = new_node
 
-        self.__tail = new_node              # Set the new node as the tail 
-                                            # node. No change to head.
-        return
+        self._tail = new_node               # Update the tail ref
